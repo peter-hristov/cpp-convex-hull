@@ -9,6 +9,7 @@ class Utils
 public:
     static std::vector<HullPoint> generateHullPoints(int, int);
     static void printVector(std::vector<HullPoint>);
+    static double getCrossProductZ(HullPoint, HullPoint, HullPoint);
 };
 
 #endif // UTILS_H
