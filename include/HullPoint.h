@@ -13,6 +13,7 @@ class HullPoint
         HullPoint *prev;
 
         HullPoint(double, double, int);
+        HullPoint(double, double, int, HullPoint*, HullPoint*);
 
         static double Distance(HullPoint, HullPoint);
 
