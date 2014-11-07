@@ -5,9 +5,9 @@
 #include <iostream>
 #include <iomanip>
 
-std::vector<HullPoint> Utils::generateHullPoints(int max, int n)
+std::vector<HullPoint*> Utils::generateHullPoints(int max, int n)
 {
-    std::vector<HullPoint> v;
+    std::vector<HullPoint*> v;
 
     srand(time(0));
     while (n > 0)
@@ -15,7 +15,7 @@ std::vector<HullPoint> Utils::generateHullPoints(int max, int n)
         float x = static_cast<double>((rand() / (RAND_MAX * 1.0)) * max);
         float y = static_cast<double>((rand() / (RAND_MAX * 1.0)) * max);
 
-        v.push_back(HullPoint(x, y, n));
+        v.push_back(new HullPoint(x, y, n));
 
         n--;
     }
