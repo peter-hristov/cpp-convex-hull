@@ -1,30 +1,71 @@
 #include "ConvexHullAlgorithm.h"
 
-std::atomic<int> ConvexHullAlgorithm::maxThreads{0};
+std::atomic<int> ConvexHullAlgorithm::numThreads{0};
+int ConvexHullAlgorithm::maxThreads = 4;
 
-ConvexHullAlgorithm::ConvexHullAlgorithm(std::vector<Point*> InputPoints,int l, int r)
+ConvexHullAlgorithm::ConvexHullAlgorithm(std::vector<Point*> InputPoints,int leftLimit, int rightLimit)
 {
     this->InputPoints = InputPoints;
-    this->l=l;
-    this->r=r;
+    this->leftLimit=leftLimit;
+    this->rightLimit=rightLimit;
 }
 
-std::vector<Point*> ConvexHullAlgorithm::start()
+
+
+bool ConvexHullAlgorithm::sanityCheck()
 {
-    int min = ( l + r ) / 2;
+    HullPoint *x = this->omega;
 
-    this->omega = this->computeConvexHull(l, r);
+    // Base case 1
+    if ( x->next == x )
+        return true;
+
+    // Base case 2
+    if ( x->next->next == x)
+        return true;
+
+    do
+    {
+        HullPoint *y = x->next;
+
+        HullPoint *z = y->next;
+
+        if ( z == x )
+            break;
+
+        int isNegative = this->getCrossProductZ(*x,*y,*z) < 0 ? -1 : 1;
+
+        do
+        {
+            if ( isNegative * this->getCrossProductZ(*x, *y, *z) < 0)
+                return false;
+
+            z = z->next;
+        } while ( z!=x );
 
 
-    HullPoint *z = this->omega;
+        x = x->next;
+
+    } while( x!= this->omega );
+
+    return true;
+
+}
+
+
+std::vector<Point*> ConvexHullAlgorithm::Start()
+{
+    this->omega = this->computeConvexHull(this->leftLimit, this->rightLimit);
+
+    HullPoint *x = this->omega;
 
     std::vector<Point*> temp;
 
     do
     {
-        temp.push_back(this->InputPoints[z->index]);
-        z = z->next;
-    } while ( z!=this->omega );
+        temp.push_back(this->InputPoints[x->index]);
+        x = x->next;
+    } while ( x!=this->omega );
 
     this->OutputPoints = temp;
 
@@ -159,21 +200,23 @@ HullPoint* ConvexHullAlgorithm::computeConvexHull(int l, int r)
     HullPoint *A;
     HullPoint *B;
 
-    if ( ConvexHullAlgorithm::maxThreads >= 2 )
+    if ( ConvexHullAlgorithm::numThreads >= ConvexHullAlgorithm::maxThreads )
     {
         A = computeConvexHull(l, mid);
         B = computeConvexHull(mid+1, r);
-
     }
     else
     {
         ConvexHullAlgorithm c(InputPoints, l, mid);
-        std::thread t(&ConvexHullAlgorithm::start, &c); ConvexHullAlgorithm::maxThreads++;
+
+        std::thread t(&ConvexHullAlgorithm::Start, &c);
+        ConvexHullAlgorithm::numThreads++;
+
         B = computeConvexHull(mid+1, r);
 
         t.join();
 
-        ConvexHullAlgorithm::maxThreads--;
+        ConvexHullAlgorithm::numThreads--;
         A = c.omega;
     }
 

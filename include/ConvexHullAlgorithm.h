@@ -13,18 +13,25 @@ class ConvexHullAlgorithm
 {
 
 public:
-    static std::atomic<int> maxThreads;
-
     std::vector<Point*> InputPoints;
     std::vector<Point*> OutputPoints;
-    HullPoint *omega;
-    int l, r;
+    static int maxThreads;
 
+    std::vector<Point*> Start();
+    bool sanityCheck();
     ConvexHullAlgorithm(std::vector<Point*>, int, int);
 
-    std::vector<Point*> start();
-
 private:
+
+    // Algorithm is run in interval [ InputPoints[l], InputPoints[r] ]
+    int leftLimit, rightLimit;
+
+    // Arbitrary point on the Convex Hull on all of the Points.
+    HullPoint *omega;
+
+    // Current number of threads and max
+    static std::atomic<int> numThreads;
+
 
     double getCrossProductZ(HullPoint , HullPoint , HullPoint );
 

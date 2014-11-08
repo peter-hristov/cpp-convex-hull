@@ -9,127 +9,71 @@
 
 using namespace std;
 
-void blq ()
-{
-
-    vector<Point*> A;
-    vector<Point*> B;
-
-    A.push_back(new Point(1.2, 5.0, 1));
-    A.push_back(new Point(1.9, 7.0, 2));
-    A.push_back(new Point(2.8, 1.8, 3));
-    A.push_back(new Point(3.8, 3.0, 4));
-    A.push_back(new Point(4.2, 9.0, 5));
-    A.push_back(new Point(4.8, 6.0, 6));
-
-    B.push_back(new Point(6.1, 4.1, 7));
-    B.push_back(new Point(6.9, 7.0, 8));
-    B.push_back(new Point(7.0, 1.0, 9));
-    B.push_back(new Point(7.6, 8.1, 10));
-    B.push_back(new Point(8.5, 7.5, 11));
-    B.push_back(new Point(9.2, 2.0, 12));
-
-
-    for(Point *i : B)
-    {
-        A.push_back(i);
-    }
-
-    //ConvexHullAlgorithmWrapper c(A);
-
-    HullPoint* U;//c.computeConvexHull(A,0,A.size()-1);
-
-    cout<<endl<<endl;
-
-    HullPoint *x = U;
-
-    do
-    {
-        cout<<x->index<<" ";
-        x = x->next;
-    } while ( x!= U);
-
-}
-
-class test
-{
-
-};
-
 
 int main()
 {
-    int numPoints = 1000000;
+    int numPoints = 1000;
     int maxCoordinates = 32000;
+    ConvexHullAlgorithm::maxThreads = std::thread::hardware_concurrency();
 
-    cout<<std::thread::hardware_concurrency();
+    clock_t timer;
 
-    int test = 1;
+    bool writeToFile = false;
+    ofstream myFile, ymFile;
+    std::string outputFile = "/home/peter/convex/output.txt";
+    std::string inputFile = "/home/peter/convex/input.txt";
 
-    if ( test == 1)
+    if ( writeToFile ) {
+        myFile.open(outputFile);
+        ymFile.open(inputFile);
+    }
+
+    // Step 1 : Generating random points.
+    timer = clock();
+
+    vector<Point*> V = Utils::generatePoints(maxCoordinates, numPoints);
+
+    cout << "Time for generating : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
+    if ( writeToFile ) myFile << "Time for generating : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
+
+
+
+    // Step 2 : sorting by x coordinate
+    timer = clock();
+
+    sort(V.begin(), V.end(), [](Point *a, Point *b){ return a->x < b->x;});
+
+    cout << "Time for sorting : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
+    if ( writeToFile ) myFile << "Time for sorting : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
+
+
+    // Step 3 : run the Convex Hull Algorithm
+    timer = clock();
+    ConvexHullAlgorithm charlie(V,0,V.size()-1);
+    thread t(&ConvexHullAlgorithm::Start, &charlie);
+    t.join();
+
+    cout<< "Time for convexing : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
+    if ( writeToFile ) myFile<< "Time for convexing : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
+
+    if ( charlie.sanityCheck())
+        cout<<"Everthing is calculated perfectly!";
+
+
+    for(Point *i : V)
     {
-        clock_t s1;
-
-        ofstream myFile, ymFile;
-        myFile.open("/home/peter/convex/output.txt");
-        ymFile.open("/home/peter/convex/input.txt");
-
-        s1 = clock();
-        vector<Point*> V = Utils::generatePoints(maxCoordinates, numPoints);
-        cout << "Time for generating : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
-        //cout<<"Generated ... "<<endl;
-
-        //myFile << "Time for generating : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
-        //cout<<"Generated ... "<<endl;
-
-
-        s1 = clock();
-        sort(V.begin(), V.end(), [](Point *a, Point *b){ return a->x < b->x;});
-        cout << "Time for sorting : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
-        //cout<<"Sorted ..."<<endl;
-
-        s1 = clock();
-        //ConvexHullAlgorithmWrapper c(V);
-        ConvexHullAlgorithm c(V,0,V.size()-1);
-
-        thread t(&ConvexHullAlgorithm::start, &c);
-
-        t.join();
-
-        std::vector<Point*> U = c.OutputPoints;
-
-
-        //vector<Point*> U = c.compute();
-        cout<< "Time for convexing : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
-
-
-        for(Point *i : V)
-        {
-            ymFile << "( " << i->x << " , " << i->y <<" ) "<<endl;
-
-        }
-
-        for (Point *i : U)
-        {
-            myFile << "( " << i->x << " , " << i->y <<" ) "<<endl;
-        }
-
-        myFile.close();
-        ymFile.close();
+        ymFile << "( " << i->x << " , " << i->y <<" ) "<<endl;
 
     }
 
-    if ( test == 2 )
-
-        blq();
-
-    else
+    std::vector<Point*> U = charlie.OutputPoints;
+    for (Point *i : U)
     {
-
+        myFile << "( " << i->x << " , " << i->y <<" ) "<<endl;
     }
 
+    myFile.close();
+    ymFile.close();
 
-
-    cout << "Hello world!" << endl;
     return 0;
 }
