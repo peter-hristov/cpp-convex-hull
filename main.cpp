@@ -216,7 +216,7 @@ void blq ()
 
 int main()
 {
-    int numPoints = 1000;
+    int numPoints = 10000;
     int maxCoordinates = 32000;
 
     int test = 1;
