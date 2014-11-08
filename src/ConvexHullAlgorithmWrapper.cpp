@@ -28,7 +28,7 @@ std::vector<Point*> ConvexHullAlgorithmWrapper::getResult(HullPoint* x)
 
 std::vector<Point*> ConvexHullAlgorithmWrapper::startComputing()
 {
-    HullPoint *x = ConvexHullAlgorithm<HullPoint>::computeConvexHull(this->InputPoints, 0, this->InputPoints.size()-1);
+    HullPoint *x = ConvexHullAlgorithm::computeConvexHull(this->InputPoints, 0, this->InputPoints.size()-1);
 
 
     this->OutputPoints = getResult(x);

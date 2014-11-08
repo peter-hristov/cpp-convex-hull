@@ -60,12 +60,12 @@ class test
 
 int main()
 {
-    int numPoints = 1000;
+    int numPoints = 10;
     int maxCoordinates = 32000;
 
     int test = 1;
 
-    if ( test == 3)
+    if ( test == 1)
     {
         clock_t s1;
 

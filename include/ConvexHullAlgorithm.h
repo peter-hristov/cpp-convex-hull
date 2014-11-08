@@ -6,23 +6,20 @@
 #include "Point.h"
 #include "HullPoint.h"
 
-template<class HullPoint>
-class ConvexHullAlgorithm
+
+namespace ConvexHullAlgorithm
 {
+    double getCrossProductZ(HullPoint, HullPoint, HullPoint);
 
-    public:
+    HullPoint* combine(HullPoint*, HullPoint*);
 
-        static double getCrossProductZ(HullPoint, HullPoint, HullPoint);
+    HullPoint* computeConvexHull(std::vector<Point*>, int, int);
 
-        static HullPoint* combine(HullPoint*, HullPoint*);
+    HullPoint* getMinMax(HullPoint*, int );
 
-        static HullPoint* computeConvexHull(std::vector<Point*>, int, int);
+    bool isTangent(HullPoint*, HullPoint*, HullPoint*, int );
 
-        static HullPoint* getMinMax(HullPoint*, int );
-
-        static bool isTangent(HullPoint*, HullPoint*, HullPoint*, int );
-
-        static HullPoint* findTangent(HullPoint*, HullPoint*, HullPoint*, int, int);
+    HullPoint* findTangent(HullPoint*, HullPoint*, HullPoint*, int, int);
 };
 
 #endif // CONVEXHULLALGORITHM_H

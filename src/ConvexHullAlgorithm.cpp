@@ -1,7 +1,6 @@
 #include "ConvexHullAlgorithm.h"
 
-template<class HullPoint>
-double ConvexHullAlgorithm<HullPoint>::getCrossProductZ(HullPoint a, HullPoint b, HullPoint c)
+double ConvexHullAlgorithm::getCrossProductZ(HullPoint a, HullPoint b, HullPoint c)
 {
     return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
 }
@@ -12,8 +11,7 @@ double ConvexHullAlgorithm<HullPoint>::getCrossProductZ(HullPoint a, HullPoint b
  * @param  orientation 1 maximum / -1 minimum
  * @return             Pointer the the min/max element in A
  */
-template<class HullPoint>
-HullPoint* ConvexHullAlgorithm<HullPoint>::getMinMax(HullPoint *A, int orientation)
+HullPoint* ConvexHullAlgorithm::getMinMax(HullPoint *A, int orientation)
 {
     HullPoint* x = A;
     HullPoint* z = x;
@@ -35,8 +33,7 @@ HullPoint* ConvexHullAlgorithm<HullPoint>::getMinMax(HullPoint *A, int orientati
  * @param  orientation Clockwise(1) / Counterclockwise(-1) for the cross product of vectors (ab)x(ac)
  * @return             Whether (ab) is a tangent to U
  */
-template<class HullPoint>
-bool ConvexHullAlgorithm<HullPoint>::isTangent(HullPoint *a, HullPoint *b, HullPoint* U, int orientation)
+bool ConvexHullAlgorithm::isTangent(HullPoint *a, HullPoint *b, HullPoint* U, int orientation)
 {
     HullPoint *x = U;
     do
@@ -60,8 +57,7 @@ bool ConvexHullAlgorithm<HullPoint>::isTangent(HullPoint *a, HullPoint *b, HullP
  * @param  orientation Clockwise(1) / Counterclockwise(-1) for computing the cross product in isTangent
  * @return             A point b for which (ab) is a tanget to U
  */
-template<class HullPoint>
-HullPoint* ConvexHullAlgorithm<HullPoint>::findTangent(HullPoint *a, HullPoint *b, HullPoint* U, int direction, int orientation)
+HullPoint* ConvexHullAlgorithm::findTangent(HullPoint *a, HullPoint *b, HullPoint* U, int direction, int orientation)
 {
     while(!isTangent(a,b,U,orientation))
     {
@@ -78,8 +74,7 @@ HullPoint* ConvexHullAlgorithm<HullPoint>::findTangent(HullPoint *a, HullPoint *
  * @param  B Second Convex Hull
  * @return   Combinex Convex Hull
  */
-template<class HullPoint>
-HullPoint* ConvexHullAlgorithm<HullPoint>::combine(HullPoint* A, HullPoint* B)
+HullPoint* ConvexHullAlgorithm::combine(HullPoint* A, HullPoint* B)
 {
     HullPoint *rightA = getMinMax(A, 1);
     HullPoint *leftB = getMinMax(B, -1);
@@ -142,8 +137,7 @@ HullPoint* ConvexHullAlgorithm<HullPoint>::combine(HullPoint* A, HullPoint* B)
  * @param  r Right index of current subset of points.
  * @return A HullPoints* that's any element in the Convex Hull Doubly Linked List.
  */
-template<class HullPoint>
-HullPoint* ConvexHullAlgorithm<HullPoint>::computeConvexHull(std::vector<Point*> U, int l, int r)
+HullPoint* ConvexHullAlgorithm::computeConvexHull(std::vector<Point*> U, int l, int r)
 {
     if ( l == r )
     {
