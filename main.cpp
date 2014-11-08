@@ -223,16 +223,34 @@ int main()
 
     if ( test == 1)
     {
+        clock_t s1;
+
         ofstream myFile, ymFile;
         myFile.open("/home/peter/convex/output.txt");
         ymFile.open("/home/peter/convex/input.txt");
 
+
+        s1 = clock();
+
         vector<HullPoint*> V = Utils::generateHullPoints(maxCoordinates, numPoints);
 
+        myFile << "Time for generating : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
+        cout<<"Generated ... "<<endl;
+
         //A.begin( ), A.end( ), []( HullPoint *a, HullPoint *b){ return a->x < b->x;});
+
+        s1 = clock();
+
         sort(V.begin(), V.end(), [](HullPoint *a, HullPoint *b){ return a->x < b->x;});
 
+        myFile << "Time for sorting : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
+        cout<<"Sorted ..."<<endl;
+
+
+        s1 = clock();
         vector<HullPoint*> U = computeConvexHull(V,0,V.size()-1);
+        myFile << "Time for convexing : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
+
 
         for(HullPoint *i : V)
         {
