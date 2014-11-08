@@ -60,7 +60,7 @@ class test
 
 int main()
 {
-    int numPoints = 10;
+    int numPoints = 3000;
     int maxCoordinates = 32000;
 
     int test = 1;
@@ -88,9 +88,10 @@ int main()
         //cout<<"Sorted ..."<<endl;
 
         s1 = clock();
-        ConvexHullAlgorithmWrapper c(V);
+        //ConvexHullAlgorithmWrapper c(V);
+        ConvexHullAlgorithm c(V);
         //HullPoint* U = c.computeConvexHull(V,0,V.size()-1);
-        vector<Point*> U = c.startComputing();
+        vector<Point*> U = c.compute();
         cout<< "Time for convexing : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
 
 
