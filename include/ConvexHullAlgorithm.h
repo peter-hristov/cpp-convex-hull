@@ -5,20 +5,26 @@
 #include "Utils.h"
 #include "Point.h"
 #include "HullPoint.h"
+#include <thread>
+#include <atomic>
 
 
 class ConvexHullAlgorithm
 {
 
 public:
+    static std::atomic<int> maxThreads;
 
     std::vector<Point*> InputPoints;
     std::vector<Point*> OutputPoints;
+    HullPoint *omega;
+    int l, r;
 
-    ConvexHullAlgorithm(std::vector<Point*>);
+    ConvexHullAlgorithm(std::vector<Point*>, int, int);
 
-    std::vector<Point*> compute();
+    std::vector<Point*> start();
 
+private:
 
     double getCrossProductZ(HullPoint , HullPoint , HullPoint );
 
@@ -69,7 +75,6 @@ public:
      * @return A HullPoints* that's any element in the Convex Hull Doubly Linked List.
      */
     HullPoint* computeConvexHull(int l, int r);
-
 };
 
 #endif // CONVEXHULLALGORITHM_H

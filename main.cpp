@@ -3,12 +3,11 @@
 #include <algorithm>
 #include "include/HullPoint.h"
 #include "include/Utils.h"
-#include "include/ConvexHullAlgorithmWrapper.h"
 #include "include/ConvexHullAlgorithm.h"
 #include <fstream>
+#include <thread>
 
 using namespace std;
-
 
 void blq ()
 {
@@ -36,7 +35,7 @@ void blq ()
         A.push_back(i);
     }
 
-    ConvexHullAlgorithmWrapper c(A);
+    //ConvexHullAlgorithmWrapper c(A);
 
     HullPoint* U;//c.computeConvexHull(A,0,A.size()-1);
 
@@ -60,8 +59,10 @@ class test
 
 int main()
 {
-    int numPoints = 3000;
+    int numPoints = 1000000;
     int maxCoordinates = 32000;
+
+    cout<<std::thread::hardware_concurrency();
 
     int test = 1;
 
@@ -78,8 +79,8 @@ int main()
         cout << "Time for generating : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
         //cout<<"Generated ... "<<endl;
 
-        myFile << "Time for generating : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
-        cout<<"Generated ... "<<endl;
+        //myFile << "Time for generating : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
+        //cout<<"Generated ... "<<endl;
 
 
         s1 = clock();
@@ -89,9 +90,16 @@ int main()
 
         s1 = clock();
         //ConvexHullAlgorithmWrapper c(V);
-        ConvexHullAlgorithm c(V);
-        //HullPoint* U = c.computeConvexHull(V,0,V.size()-1);
-        vector<Point*> U = c.compute();
+        ConvexHullAlgorithm c(V,0,V.size()-1);
+
+        thread t(&ConvexHullAlgorithm::start, &c);
+
+        t.join();
+
+        std::vector<Point*> U = c.OutputPoints;
+
+
+        //vector<Point*> U = c.compute();
         cout<< "Time for convexing : " << ((float)clock() - s1)/CLOCKS_PER_SEC<<endl;
 
 
@@ -100,7 +108,6 @@ int main()
             ymFile << "( " << i->x << " , " << i->y <<" ) "<<endl;
 
         }
-
 
         for (Point *i : U)
         {

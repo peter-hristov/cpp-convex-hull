@@ -42,7 +42,6 @@
 		<Unit filename="include/Utils.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/ConvexHullAlgorithm.cpp" />
-		<Unit filename="src/ConvexHullAlgorithmWrapper.cpp" />
 		<Unit filename="src/HullPoint.cpp" />
 		<Unit filename="src/Point.cpp" />
 		<Unit filename="src/Utils.cpp" />
