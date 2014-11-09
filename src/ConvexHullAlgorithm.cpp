@@ -10,8 +10,6 @@ ConvexHullAlgorithm::ConvexHullAlgorithm(std::vector<Point*> InputPoints,int lef
     this->rightLimit=rightLimit;
 }
 
-
-
 bool ConvexHullAlgorithm::sanityCheck()
 {
     HullPoint *x = this->omega;
@@ -27,7 +25,6 @@ bool ConvexHullAlgorithm::sanityCheck()
     do
     {
         HullPoint *y = x->next;
-
         HullPoint *z = y->next;
 
         if ( z == x )
@@ -49,7 +46,6 @@ bool ConvexHullAlgorithm::sanityCheck()
     } while( x!= this->omega );
 
     return true;
-
 }
 
 
@@ -171,8 +167,6 @@ HullPoint* ConvexHullAlgorithm::combine(HullPoint* A, HullPoint* B)
 
     return upperA;
 }
-
-// std::atomic<int> usedThreads(0);
 
 HullPoint* ConvexHullAlgorithm::computeConvexHull(int l, int r)
 {
