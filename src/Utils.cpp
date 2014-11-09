@@ -16,8 +16,3 @@ std::vector<Point*> Utils::generatePoints(int max, int n)
     }
     return v;
 }
-
-double Utils::getCrossProductZ(HullPoint a, HullPoint b, HullPoint c)
-{
-    return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
-}

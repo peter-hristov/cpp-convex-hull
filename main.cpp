@@ -37,7 +37,6 @@ int main()
     if ( writeToFile ) myFile << "Time for generating : " << ((float)clock() - timer)/CLOCKS_PER_SEC<<endl;
 
 
-
     // Step 2 : sorting by x coordinate
     timer = clock();
 

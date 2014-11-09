@@ -63,7 +63,7 @@ std::vector<Point*> ConvexHullAlgorithm::Start()
 
     do
     {
-        temp.push_back(this->InputPoints[x->index]);
+        temp.push_back(this->InputPoints[x->point.index]);
         x = x->next;
     } while ( x!=this->omega );
 
@@ -75,7 +75,7 @@ std::vector<Point*> ConvexHullAlgorithm::Start()
 
 double ConvexHullAlgorithm::getCrossProductZ(HullPoint a, HullPoint b, HullPoint c)
 {
-    return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+    return (b.point.x - a.point.x) * (c.point.y - a.point.y) - (c.point.x - a.point.x) * (b.point.y - a.point.y);
 }
 
 
@@ -86,7 +86,7 @@ HullPoint* ConvexHullAlgorithm::getMinMax(HullPoint *A, int orientation)
 
     do
     {
-        if ( z->x * orientation > x->x * orientation ) {
+        if ( z->point.x * orientation > x->point.x * orientation ) {
             z = x;
         }
         x = x->next;
@@ -178,7 +178,7 @@ HullPoint* ConvexHullAlgorithm::computeConvexHull(int l, int r)
 {
     if ( l == r )
     {
-        HullPoint *a = new HullPoint(this->InputPoints[l]->x, this->InputPoints[l]->y, l);
+        HullPoint *a = new HullPoint(*(this->InputPoints[l]));
         a->next = a; a->prev = a;
         return a;
     }
@@ -186,8 +186,8 @@ HullPoint* ConvexHullAlgorithm::computeConvexHull(int l, int r)
     if ( l + 1 == r)
     {
         HullPoint *a, *b;
-        a = new HullPoint(this->InputPoints[l]->x, this->InputPoints[l]->y, l);
-        b = new HullPoint(this->InputPoints[r]->x, this->InputPoints[r]->y, r);
+        a = new HullPoint(*(this->InputPoints[l]));
+        b = new HullPoint(*(this->InputPoints[r]));
 
         a->next = b; a->prev = b;
         b->next = a; b->prev = a;

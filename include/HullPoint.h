@@ -1,19 +1,17 @@
 #ifndef HULLPOINT_H
 #define HULLPOINT_H
 
+#include "Point.h"
 
 class HullPoint
 {
     public:
-
-        double x, y;
-        int index;
+        Point point;
 
         HullPoint *next;
         HullPoint *prev;
 
-        HullPoint(double, double, int);
-        HullPoint(double, double, int, HullPoint*, HullPoint*);
+        HullPoint(Point);
 
         static double Distance(HullPoint, HullPoint);
 
